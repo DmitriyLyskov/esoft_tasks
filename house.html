@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дом с крышей, окном и дымоходом</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ad87eb 0%, #c7e898 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Контейнер для всего дома */
+        .house-container {
+            position: relative;
+            margin: 50px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Группа крыша-дымоход */
+        .roof-group {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Треугольная крыша */
+        .roof {
+            width: 0;
+            height: 0;
+            border-left: 260px solid transparent;
+            border-right: 260px solid transparent;
+            border-bottom: 180px solid #8B4513;
+            position: relative;
+            margin: 0 auto;
+        }
+            /* Дымоход */
+        .chimney {
+            position: absolute;
+            top: 40px;
+            right: 100px;
+            width: 60px;
+            height: 100px;
+            background: linear-gradient(90deg, #B22222 0%, #8B3A3A 100%);
+            border-radius: 8px 8px 0 0;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+            z-index: 3;
+        }
+
+        /* Текстура кирпичей на дымоходе */
+        .chimney::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: repeating-linear-gradient(
+                0deg,
+                #CD5C5C 0px,
+                #CD5C5C 8px,
+                #B22222 8px,
+                #B22222 16px
+            );
+            border-radius: 4px;
+        }
+
+        /* Верхушка дымохода */
+        .chimney::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -5px;
+            right: -5px;
+            height: 12px;
+            background: #696969;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* Основание дома */
+        .house-base {
+            width: 520px;
+            height: 320px;
+            background: linear-gradient(135deg, #DEB887 0%, #BC8F6B 100%);
+            position: relative;
+            margin-top: -5px;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Текстура досок на доме */
+        .house-base::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                rgba(139, 69, 19, 0.1) 0px,
+                rgba(139, 69, 19, 0.1) 2px,
+                transparent 2px,
+                transparent 30px
+            );
+            pointer-events: none;
+        }
+
+        /* Фундамент дома */
+        .foundation {
+            position: absolute;
+            bottom: -15px;
+            left: -10px;
+            right: -10px;
+            height: 25px;
+            background: #696969;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        /* Круглое окно */
+        .window {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 35% 35%, #87CEEB, #4682B4);
+            border-radius: 50%;
+            border: 6px solid #F4A460;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+
+        /* Рама окна (крестовина) */
+        .window::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: #F4A460;
+            transform: translateY(-50%);
+        }
+
+        .window::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            bottom: 0;
+            width: 6px;
+            background: #F4A460;
+            transform: translateX(-50%);
+        }
+
+        /* Отражение на окне (блик) */
+        .window .reflection {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            filter: blur(2px);
+        }
+
+        /* Дверь */
+        .door {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 150px;
+            background: linear-gradient(135deg, #8B5A2B, #5D3A1A);
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 2;
+        }
+
+        /* Ручка двери */
+        .door::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            width: 8px;
+            height: 8px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 4px rgba(0,0,0,0.3);
+        }
+
+        /* Наличник вокруг окна */
+        .window-trim {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid #CD853F;
+            pointer-events: none;
+        }
+
+        /* Наличник вокруг двери */
+        .door-trim {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 110px;
+            height: 155px;
+            border: 4px solid #CD853F;
+            border-radius: 0 0 12px 12px;
+            pointer-events: none;
+        }
+
+        /* Крыльцо */
+        .porch {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 20px;
+            background: #A0522D;
+            border-radius: 4px;
+            z-index: 1;
+        }
+
+        /* Кусты у дома */
+        .bush {
+            position: absolute;
+            bottom: -10px;
+            width: 80px;
+            height: 50px;
+            background: radial-gradient(circle, #2E8B57, #228B22);
+            border-radius: 50% 50% 45% 45%;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .bush-left {
+            left: -40px;
+        }
+
+        .bush-right {
+            right: -40px;
+        }
+
+        /* Куст слева дополнительный */
+        .bush-left-small {
+            left: -80px;
+            width: 60px;
+            height: 40px;
+        }
+
+        /* Дорожка */
+        .path {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 30px;
+            background: #D2691E;
+            border-radius: 20px;
+            opacity: 0.6;
+        }
+
+        /* Облака для декора */
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            opacity: 0.9;
+        }
+
+        .cloud1 {
+            width: 80px;
+            height: 50px;
+            top: 30px;
+            left: -100px;
+        }
+
+        .cloud1::before {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            top: -25px;
+            left: 15px;
+        }
+
+        .cloud1::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            top: -30px;
+            left: 40px;
+        }
+
+        .cloud2 {
+            width: 100px;
+            height: 60px;
+            top: 80px;
+            right: -120px;
+        }
+
+        .cloud2::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            top: -30px;
+            left: 15px;
+        }
+
+        .cloud2::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            top: -35px;
+            left: 50px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .house-base {
+                width: 400px;
+                height: 260px;
+            }
+            
+            .roof {
+                border-left: 200px solid transparent;
+                border-right: 200px solid transparent;
+                border-bottom: 140px solid #8B4513;
+            }
+            
+            .roof::before {
+                left: -180px;
+                width: 360px;
+            }
+            
+            .window {
+                width: 90px;
+                height: 90px;
+                top: 60px;
+            }
+            
+            .window-trim {
+                width: 110px;
+                height: 110px;
+                top: 55px;
+            }
+            
+            .door {
+                width: 80px;
+                height: 120px;
+            }
+            
+            .door-trim {
+                width: 90px;
+                height: 130px;
+            }
+            
+            .chimney {
+                right: 20px;
+                width: 45px;
+                height: 80px;
+                top: -50px;
+            }
+            
+            .bush-left, .bush-right {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="house-container">
+        <!-- Группа крыши и дымохода -->
+        <div class="roof-group">
+            <div class="roof"></div>
+            <div class="chimney"></div>
+        </div>
+        
+        <!-- Основание дома -->
+        <div class="house-base">
+            <!-- Фундамент -->
+            <div class="foundation"></div>
+            
+            <!-- Круглое окно с наличником -->
+            <div class="window">
+                <div class="reflection"></div>
+            </div>
+            <div class="window-trim"></div>
+            
+            <!-- Дверь с наличником -->
+            <div class="door"></div>
+            <div class="door-trim"></div>
+            <div class="porch"></div>
+            
+            <!-- Декоративные кусты -->
+            <div class="bush bush-left"></div>
+            <div class="bush bush-left-small bush-left"></div>
+            <div class="bush bush-right"></div>
+            
+            <!-- Дорожка -->
+            <div class="path"></div>
+        </div>
+        
+        <!-- Декоративные облака -->
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+    </div>
+</body>
+</html>
